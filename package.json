@@ -1,0 +1,22 @@
+{
+  "name": "blueprint-model",
+  "version": "0.0.1",
+  "description": "Allow the definition of models.",
+  "keywords": [
+    "model",
+    "schema",
+    "blueprint"
+  ],
+  "author": {
+    "name": "Joao Paulo Dubas",
+    "email": "joao.dubas@gmail.com",
+    "url": "http://blog.joaodubas.me/"
+  },
+  "scripts": {
+    "test": "node --harmony ./node_modules/.bin/_mocha debug"
+  },
+  "devDependencies": {
+    "mocha": "~1.16.2",
+    "chai": "~1.8.1"
+  }
+}

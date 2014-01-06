@@ -13,7 +13,7 @@
     "url": "http://blog.joaodubas.me/"
   },
   "scripts": {
-    "test": "node --harmony ./node_modules/.bin/_mocha debug"
+    "test": "node --harmony ./node_modules/.bin/_mocha"
   },
   "devDependencies": {
     "mocha": "~1.16.2",

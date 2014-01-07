@@ -10,6 +10,7 @@ NODE=/usr/local/bin/node
 CMD=$(DOCKER) run -i -t -name $(DOCKER_NAME) -v $(DOCKER_MOUNT) -w $(DOCKER_DIR)
 CMD_NPM=$(CMD) -entrypoint $(NPM) $(DOCKER_IMAGE)
 CMD_NODE=$(CMD) -entrypoint $(NODE) $(DOCKER_IMAGE)
+CMD_SERVER=$(CMD) -entrypoint python -w $(DOCKER_DIR)/coverage/lcov-report -expose 8001 -p 8001:8001 $(DOCKER_IMAGE) -m SimpleHTTPServer 8001
 CMD_KILL=$(DOCKER) kill $(DOCKER_NAME) && $(DOCKER) rm $(DOCKER_NAME)
 
 install:
@@ -22,20 +23,23 @@ shell:
 
 test:
 	@$(CMD_NPM) test \
-		|| $(MAKE) kill
+		; $(MAKE) kill
 
 coverage:
 	@$(CMD_NPM) run coverage \
-		|| $(MAKE) kill
+		; $(MAKE) kill
 
 check-coverage:
 	@$(CMD_NPM) run check-coverage \
-		|| $(MAKE) kill
+		; $(MAKE) kill
 
 jshint:
 	@$(CMD_NODE) ./node_modules/.bin/jshint ./lib/* \
-		|| $(MAKE) kill
+		; $(MAKE) kill
 
+run:
+	@$(CMD_SERVER) \
+		; $(MAKE) kill
 kill:
 	@$(CMD_KILL)
 

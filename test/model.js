@@ -285,4 +285,20 @@ describe('model', function () {
       });
     });
   });
+
+  describe('instance', function () {
+    it('do not share property values', function () {
+      let properties = ['name', 'email', 'password'];
+      let User = model.createModel(modelName, properties);
+      let aUser = new User();
+      let otherUser = new User();
+
+      expect(aUser.name).to.be.empty;
+      expect(otherUser.name).to.be.empty;
+
+      aUser.name = 'me';
+      otherUser.name = 'it';
+      expect(aUser.name).to.not.be.equal(otherUser.name);
+    });
+  });
 });

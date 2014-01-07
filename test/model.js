@@ -204,6 +204,71 @@ describe('model', function () {
         expect(function () { thrower(20) }).to.throw(TypeError);
         expect(function () { thrower(11) }).to.not.throw(TypeError);
       });
+
+      it('can be used without required', function () {
+        let properties = [{
+          name: 'property',
+          type: 'number',
+          validators: [{
+            fn: function (value) { return value <= 10; },
+            message: 'You must set a number lower than or equal to 10.'
+          }]
+        }];
+        let User = model.createModel(modelName, properties);
+
+        function thrower(value) {
+          let user = new User();
+          user.property = value;
+        }
+
+        expect(function () { thrower(null) }).to.not.throw(TypeError);
+        expect(function () { thrower('a') }).to.throw(TypeError);
+        expect(function () { thrower(11) }).to.throw(TypeError);
+        expect(function () { thrower(10) }).to.not.throw(TypeError);
+      });
+
+      it('can be used without a type', function () {
+        let properties = [{
+          name: 'property',
+          required: true,
+          validators: [{
+            fn: function (value) { return value <= 10; },
+            message: 'You must set a number lower than or equal to 10.'
+          }]
+        }];
+        let User = model.createModel(modelName, properties);
+
+        function thrower(value) {
+          let user = new User();
+          user.property = value;
+        }
+
+        expect(function () { thrower(null) }).to.throw(TypeError);
+        expect(function () { thrower('a') }).to.throw(TypeError);
+        expect(function () { thrower(11) }).to.throw(TypeError);
+        expect(function () { thrower(10) }).to.not.throw(TypeError);
+      });
+
+      it('can be used without required and type', function () {
+        let properties = [{
+          name: 'property',
+          validators: [{
+            fn: function (value) { return value <= 10; },
+            message: 'You must set a number lower than or equal to 10.'
+          }]
+        }];
+        let User = model.createModel(modelName, properties);
+
+        function thrower(value) {
+          let user = new User();
+          user.property = value;
+        }
+
+        expect(function () { thrower(null) }).to.not.throw(TypeError);
+        expect(function () { thrower('a') }).to.throw(TypeError);
+        expect(function () { thrower(11) }).to.throw(TypeError);
+        expect(function () { thrower(10) }).to.not.throw(TypeError);
+      });
     });
 
     describe('number', function () {

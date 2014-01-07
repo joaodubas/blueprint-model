@@ -10,6 +10,7 @@ NODE=/usr/local/bin/node
 CMD=$(DOCKER) run -i -t -name $(DOCKER_NAME) -v $(DOCKER_MOUNT) -w $(DOCKER_DIR)
 CMD_NPM=$(CMD) -entrypoint $(NPM) $(DOCKER_IMAGE)
 CMD_NODE=$(CMD) -entrypoint $(NODE) $(DOCKER_IMAGE)
+CMD_KILL=$(DOCKER) kill $(DOCKER_NAME) && $(DOCKER) rm $(DOCKER_NAME)
 
 install:
 	@$(CMD_NPM) install $(args)
@@ -23,8 +24,15 @@ test:
 	@$(CMD_NPM) test
 	@$(MAKE) kill
 
-kill:
-	@$(DOCKER) kill $(DOCKER_NAME) \
-		&& $(DOCKER) rm $(DOCKER_NAME)
+coverage:
+	@$(CMD_NPM) run coverage
+	@$(MAKE) kill
 
-.PHONY: shell kill test
+check-coverage:
+	@$(CMD_NPM) run check-coverage
+	@$(MAKE) kill
+
+kill:
+	@$(CMD_KILL)
+
+.PHONY: shell kill test coverage check-coverage

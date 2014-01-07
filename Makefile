@@ -22,15 +22,15 @@ shell:
 
 test:
 	@$(CMD_NPM) test \
-		$(MAKE) kill
+		|| $(MAKE) kill
 
 coverage:
 	@$(CMD_NPM) run coverage \
-		$(MAKE) kill
+		|| $(MAKE) kill
 
 check-coverage:
 	@$(CMD_NPM) run check-coverage \
-		$(MAKE) kill
+		|| $(MAKE) kill
 
 jshint:
 	@$(CMD_NODE) ./node_modules/.bin/jshint ./lib/* \

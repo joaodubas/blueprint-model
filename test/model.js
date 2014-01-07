@@ -135,6 +135,77 @@ describe('model', function () {
       });
     });
 
+    describe('custom validators', function () {
+      it('accepts apply them', function () {
+        let properties = [{
+          name: 'property',
+          required: true,
+          type: 'number',
+          validators: [{
+            fn: function (value) { return value <= 10; },
+            message: 'You must set a number lower than or equal to 10.'
+          }]
+        }];
+        let User = model.createModel(modelName, properties);
+
+        function thrower(value) {
+          let user = new User();
+          user.property = value;
+        }
+
+        expect(function () { thrower(null) }).to.throw(TypeError);
+        expect(function () { thrower('a') }).to.throw(TypeError);
+        expect(function () { thrower(11) }).to.throw(TypeError);
+        expect(function () { thrower(10) }).to.not.throw(TypeError);
+      });
+
+      it('must be an array', function () {
+        let properties = [{
+          name: 'property',
+          requried: true,
+          type: 'number',
+          validators: {
+            fn: function (value) { return true; },
+            message: 'NoOp'
+          }
+        }];
+        
+        expect(
+          function () { let User = model.createModel(modelName, properties); }
+        ).to.throw(TypeError);
+      });
+
+      it('can be multiple', function () {
+        let properties = [{
+          name: 'property',
+          required: true,
+          type: 'number',
+          validators: [
+            {
+              fn: function (value) { return value >= 10; },
+              message: 'You must set a number greater than or equal to 10.'
+            },
+            {
+              fn: function (value) { return value < 20; },
+              message: 'You must set a number lower than 20.'
+            },
+          ]
+        }];
+        let User = model.createModel(modelName, properties);
+
+        function thrower(value) {
+          let user = new User();
+          user.property = value;
+        }
+
+        expect(function () { thrower(null) }).to.throw(TypeError);
+        expect(function () { thrower('a') }).to.throw(TypeError);
+        expect(function () { thrower(9) }).to.throw(TypeError);
+        expect(function () { thrower(20) }).to.throw(TypeError);
+        expect(function () { thrower(11) }).to.not.throw(TypeError);
+      });
+    });
+
     describe('number', function () {
       let properties = [
         { name: 'property', type: 'number', required: false }

@@ -20,13 +20,15 @@
   "scripts": {
     "test": "node --harmony ./node_modules/.bin/_mocha",
     "coverage": "node --harmony ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha",
-    "check-coverage": "node --harmony ./node_modules/.bin/istanbul check-coverage --statements 80 --branches 80 --lines 80 --functions 80"
+    "check-coverage": "node --harmony ./node_modules/.bin/istanbul check-coverage --statements 80 --branches 80 --lines 80 --functions 80",
+    "coveralls": "./coverage/lcov.info | ./node_modules/.bin/coveralls.js"
   },
   "devDependencies": {
     "mocha": "~1.16.2",
     "chai": "~1.8.1",
     "istanbul": "~0.2.3",
-    "jshint": "~2.4.1"
+    "jshint": "~2.4.1",
+    "coveralls": "~2.6.1"
   },
   "license": "MIT"
 }

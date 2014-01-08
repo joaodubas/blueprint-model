@@ -1,6 +1,7 @@
 # blueprint-model
 
 [![Build Status][travis-build-status]][travis-build]
+[![Coverage Status][coverage-build-status]][coverage-build]
 
 Database agnostic data modeller. Somewhat inspired by the [model
 component][component-model] made by [TJ Holowaychuck][git-visionmedia].
@@ -104,5 +105,7 @@ var User = model.createModel('User', properties);
 
 [travis-build-status]: https://travis-ci.org/joaodubas/blueprint-model.png?branch=master
 [travis-build]: https://travis-ci.org/joaodubas/blueprint-model
+[coverage-build-status]: https://coveralls.io/repos/joaodubas/blueprint-model/badge.png?branch=master
+[coverage-build]: https://coveralls.io/r/joaodubas/blueprint-model?branch=master
 [component-model]: https://github.com/component/model
 [git-visionmedia]: https://github.com/visionmedia

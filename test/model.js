@@ -327,5 +327,58 @@ describe('model', function () {
       otherUser.name = 'it';
       expect(aUser.name).to.not.be.equal(otherUser.name);
     });
+
+    it('receive values during initialization', function () {
+      let attrs = {
+        name: 'me',
+        email: 'me@me.com',
+        password: 'me'
+      };
+      let User = model.createModel(modelName, Object.keys(attrs));
+      let user = new User(attrs);
+      Object.keys(attrs).forEach(function (attr) {
+        expect(user[attr]).to.be.equal(attrs[attr]);
+      });
+    });
+
+    it('validate values during initialization', function () {
+      let properties = [
+        {
+          name: 'name',
+          required: true,
+          type: 'string'
+        },
+        {
+          name: 'email',
+          required: false,
+          type: 'string'
+        },
+        {
+          name: 'password',
+          required: true,
+          type: 'string'
+        }
+      ];
+      let User = model.createModel(modelName, properties);
+
+      function thrower(attrs) {
+        return function () {
+          return new User(attrs);
+        };
+      }
+
+      expect(
+        thrower({name: 'me', email: null, password: 'me'})
+      ).to.not.throw(TypeError);
+      expect(
+        thrower({name: 1, email: null, password: 'me'})
+      ).to.throw(TypeError);
+      expect(
+        thrower({name: 'me', email: 1, password: 'me'})
+      ).to.throw(TypeError);
+      expect(
+        thrower({name: 'me', email: 'me@me.com', password: null})
+      ).to.throw(TypeError);
+    });
   });
 });

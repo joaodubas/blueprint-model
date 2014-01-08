@@ -78,6 +78,33 @@ describe('model', function () {
         expect(User.prototype).to.have.ownProperty(key.name);
       });
     });
+
+    it('in a chain', function () {
+      function create() {
+        let User = model.createModel(modelName);
+        User
+          .setProperty('name')
+          .setProperty('email')
+          .setProperty('password');
+        return User;
+      }
+
+      expect(create).to.not.throw(Error);
+      expect(create().prototype).to.have.keys(['name', 'email', 'password']);
+    });
+
+    it('in a list', function () {
+      let properties = ['name', 'email', 'password'];
+
+      function create() {
+        let User = model.createModel(modelName);
+        User.setProperties(properties);
+        return User;
+      }
+
+      expect(create).to.not.throw(Error);
+      expect(create().prototype).to.have.keys(properties);
+    });
   });
 
   describe('validation', function () {

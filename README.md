@@ -8,7 +8,7 @@ component][component-model] made by [TJ Holowaychuck][git-visionmedia].
 
 ## API
 
-### model#createMolde(name, [properties])
+### model#createModel(name, [properties])
 
 Create a new model with the given name and optional properties.
 

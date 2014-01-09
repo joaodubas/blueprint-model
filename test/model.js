@@ -37,6 +37,12 @@ describe('model', function () {
         expect(User.prototype).to.have.ownProperty(key.name);
       });
     });
+
+    it('throw error if properties aren`t an array', function () {
+      expect(function () {
+        model.createModel(modelName, namedProperties[0]);
+      }).to.throw(TypeError);
+    });
   });
 
   describe('append properties', function () {
@@ -109,6 +115,13 @@ describe('model', function () {
 
       expect(create).to.not.throw(Error);
       expect(create().prototype).to.have.keys(properties);
+    });
+
+    it('invalid property should throw error', function () {
+      let property = [{names: 'property'}];
+      expect(function () {
+        let User = model.createModel(modelName, property);
+      }).to.throw(TypeError);
     });
   });
 

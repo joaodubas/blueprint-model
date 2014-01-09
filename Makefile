@@ -33,14 +33,15 @@ check-coverage:
 	@$(CMD_NPM) run check-coverage \
 		; $(MAKE) kill
 
-jshint:
-	@$(CMD_NODE) ./node_modules/.bin/jshint ./lib/* \
+lint:
+	@$(CMD_NPM) run lint \
 		; $(MAKE) kill
 
 run:
 	@$(CMD_SERVER) \
 		; $(MAKE) kill
+
 kill:
 	@$(CMD_KILL)
 
-.PHONY: shell kill test coverage check-coverage
+.PHONY: shell kill test coverage check-coverage lint

@@ -1,4 +1,5 @@
 'use strict';
+/* jshint expr: true */
 /* global describe, it */
 const expect = require('chai').expect;
 const model = require('../lib/model.js');
@@ -428,6 +429,106 @@ describe('model', function () {
       expect(
         thrower({name: 'me', email: 'me@me.com', password: null})
       ).to.throw(TypeError);
+    });
+  });
+
+  describe('events', function () {
+    describe('constructor', function () {
+      it('emit construct after create an instance', function (done) {
+        let properties = ['name', 'email', 'password'];
+        let User = model.createModel(modelName, properties);
+        let props = {'name': 'me', 'email': 'me@me.com', 'password': 'me'};
+
+        User.on('construct', function(instance, attrs) {
+          expect(instance.constructor.modelName).to.be.equal(User.modelName);
+          expect(attrs).to.be.eql(props);
+          done();
+        });
+
+        new User(props);
+      });
+
+      it('emit change when an attribute is set', function (done) {
+        let props = {'name': 'me', 'email': 'me@me.com', 'password': 'me'};
+        let User = model.createModel(modelName, Object.keys(props));
+        let count = 0;
+        let max_ = Object.keys(props).length;
+        User.on('change', function (instance, attr, value) {
+          expect(value).to.be.equal(props[attr]);
+          count += 1;
+          if (count === max_) done();
+        });
+
+        let user = new User();
+        Object.keys(props).forEach(function (key) {
+          user[key] = props[key];
+        });
+      });
+
+      it('emit change <attr_name> when given attribute is set', function (done) {
+        let props = {'name': 'me', 'email': 'me@me.com', 'password': 'me'};
+        let User = model.createModel(modelName, Object.keys(props));
+        let count = 0;
+        let max_ = Object.keys(props).length;
+
+        function assess(instance, value) {
+          /* jshint validthis: true */
+          expect(value).to.be.equal(props[this.attr]);
+          count += 1;
+          if (count === max_) done();
+        }
+
+        User.on('change name', assess.bind({attr: 'name'}));
+        User.on('change email', assess.bind({attr: 'email'}));
+        User.on('change password', assess.bind({attr: 'password'}));
+
+        let user = new User();
+        Object.keys(props).forEach(function (key) {
+          user[key] = props[key];
+        });
+      });
+    });
+
+    describe('instance', function () {
+      it('emit change when an attribute is set', function (done) {
+        let props = {'name': 'me', 'email': 'me@me.com', 'password': 'me'};
+        let User = model.createModel(modelName, Object.keys(props));
+        let count = 0;
+        let max_ = Object.keys(props).length;
+        let user = new User();
+        user.on('change', function (instance, attr, value) {
+          expect(value).to.be.equal(props[attr]);
+          count += 1;
+          if (count === max_) done();
+        });
+
+        Object.keys(props).forEach(function (key) {
+          user[key] = props[key];
+        });
+      });
+
+      it('emit change <attr_name> when given attribute is set', function (done) {
+        let props = {'name': 'me', 'email': 'me@me.com', 'password': 'me'};
+        let User = model.createModel(modelName, Object.keys(props));
+        let count = 0;
+        let max_ = Object.keys(props).length;
+        let user = new User();
+
+        function assess(instance, value) {
+          /* jshint validthis: true */
+          expect(value).to.be.equal(props[this.attr]);
+          count += 1;
+          if (count === max_) done();
+        }
+
+        user.on('change name', assess.bind({attr: 'name'}));
+        user.on('change email', assess.bind({attr: 'email'}));
+        user.on('change password', assess.bind({attr: 'password'}));
+
+        Object.keys(props).forEach(function (key) {
+          user[key] = props[key];
+        });
+      });
     });
   });
 });

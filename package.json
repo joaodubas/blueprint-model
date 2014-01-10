@@ -29,7 +29,9 @@
     "chai": "~1.8.1",
     "istanbul": "~0.2.3",
     "jshint": "~2.4.1",
-    "coveralls": "~2.6.1"
+    "coveralls": "~2.6.1",
+    "memdown": "~0.6.0",
+    "level-co": "~0.2.0"
   },
   "license": "MIT"
 }

@@ -3,6 +3,7 @@ DOCKER=/usr/bin/docker
 DOCKER_DIR=/opt/app
 DOCKER_MOUNT=$(ROOT):$(DOCKER_DIR)
 DOCKER_IMAGE_STABLE=joaodubas/nodejs:latest
+DOCKER_IMAGE_UNSTABLE=joaodubas/nodejs-unstable:latest
 DOCKER_IMAGE=$(DOCKER_IMAGE_STABLE)
 DOCKER_NAME=blueprint-model
 NPM=/usr/local/bin/npm

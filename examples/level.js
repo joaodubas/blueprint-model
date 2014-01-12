@@ -30,7 +30,7 @@ function use(Model, name, fn) {
     enumerable: true,
     configurable: false,
     writable: false,
-    value: fn.bind(Model)
+    value: fn
   };
   Object.defineProperty(Model, name, descriptor);
 }

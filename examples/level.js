@@ -9,30 +9,128 @@ const memdown = require('memdown');
 const model = require('../');
 
 /**
- * Database
+ * Plugin
  */
-const db = levelco.deferred(
-  'db',
-  {db: memdown}
-);
+function wrapper(opts) {
+  opts = opts || {};
+  opts.level = opts.level || ['db', {db: memdown}];
 
-/**
- * Extend model
- */
-function uses(Model, fns) {
-  Object.keys(fns).forEach(function (key) {
-    use(Model, key, fns[key]);
-  });
-}
+  if (!opts.keyAlias) throw new TypeError('Provide a default keyAlias.');
 
-function use(Model, name, fn) {
-  let descriptor = {
-    enumerable: true,
-    configurable: false,
-    writable: false,
-    value: fn
+  const db = levelco.deferred.apply(levelco, opts.level);
+
+  let protoProperties = {
+    _keyAlias: {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value: opts.keyAlias
+    },
+    _key: {
+      enumerable: false,
+      configurable: false,
+      writable: true,
+      value: null
+    },
+    _makeKey: {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value: function () {
+        if (!this._key)
+          this._key = this.model._getKey(this[this._keyAlias]);
+        return this;
+      }
+    },
+    _getKey: {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value: function () {
+        return this._makeKey()._key;
+      }
+    },
+    save: {
+      enumerable: true,
+      configurable: false,
+      writable: false,
+      value: function *() {
+        yield this.model.db.put(this._getKey(), this._values);
+      }
+    }
   };
-  Object.defineProperty(Model, name, descriptor);
+
+  let staticProperties = {
+    _getKey: {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value: function (key) {
+        if (/^posts~/.test(key))
+          key = 'posts~' + key;
+        return key;
+      }
+    },
+    db: {
+      enumerable: true,
+      configurable: false,
+      writable: false,
+      value: db
+    },
+    get: {
+      enumerable: true,
+      configurable: false,
+      writable: false,
+      value: function *(key) {
+        let datum;
+        try {
+          datum = yield this.db.get(this._getKey(key));
+        } catch (e) {
+          throw new Error(this.modelName + ' ' + key + ' not found');
+        }
+        let instance = new this(JSON.parse(datum));
+        instance._key = this._getKey(key);
+        return instance;
+      }
+    },
+    put: {
+      enumerable: true,
+      configurable: false,
+      writable: false,
+      value: function *(value) {
+        let instance;
+        let datum;
+
+        try {
+          instance = new this(value);
+        } catch (e) {
+          throw new Error('Validation error');
+        }
+
+        let key = instance._getKey();
+        try {
+          yield this.db.put(key, JSON.stringify(instance._values));
+        } catch (e) {
+          throw new Error('Could not save the instance.');
+        }
+
+        return instance;
+      }
+    },
+    del: {
+      enuerable: true,
+      configurable: false,
+      writable: false,
+      value: function *(key) {
+        yield this.db.del(this._getKey(key));
+      }
+    }
+  };
+
+  return function (Model) {
+    Object.defineProperties(Model, staticProperties);
+    Object.defineProperties(Model.prototype, protoProperties);
+  };
 }
 
 /**
@@ -45,46 +143,7 @@ const attributes = {
 };
 const properties = ['username', 'email', 'password'];
 const User = model.createModel('User', properties);
-
-const access = {
-  _key: function (key) {
-    if (/^post~/) key = 'post~' + key;
-    return key;
-  },
-  get: function *(key) {
-    let datum;
-    try {
-      datum = yield db.get(this._key(key));
-    } catch (e) {
-      throw new Error(this.modelName + ' ' + key + ' not found');
-    }
-    let instance = new this(JSON.parse(datum));
-    return instance;
-  },
-  put: function *(value) {
-    let instance;
-    let datum;
-
-    try {
-      instance = new this(value);
-    } catch (e) {
-      throw new Error('Validation error');
-    }
-
-    let key = this._key(value.name);
-    try {
-      yield db.put(key, JSON.stringify(value));
-    } catch (e) {
-      throw new Error('Could not save the instance.');
-    }
-
-    return instance;
-  },
-  del: function *(key) {
-    yield db.del(this._key(key));
-  }
-};
-uses(User, access);
+User.use(wrapper({keyAlias: 'username'}));
 
 /**
  * Usage
@@ -95,18 +154,17 @@ co(function *() {
     email: 'me@me.com',
     password: 'me'
   });
-  console.log(instance);
+  console.log('create', JSON.stringify(instance._values));
 })();
 
 co(function *() {
   var instance = yield User.get('me');
-  console.log(instance);
+  console.log('get', JSON.stringify(instance._values));
 })();
 
 co(function *() {
   yield User.del('me');
   console.log('removed');
-});
+})();
 
 exports.User = User;
-exports.db = db;

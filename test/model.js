@@ -531,4 +531,16 @@ describe('model', function () {
       });
     });
   });
+
+  describe('plugin', function () {
+    it('receives a Model constructor', function (done) {
+      let User = model.createModel('User');
+      function plugin(Model) {
+        expect(Model.constructor.name).to.be.equal(User.constructor.name);
+        expect(Model.modelName).to.be.equal(User.modelName);
+        done();
+      }
+      User.use(plugin);
+    });
+  });
 });

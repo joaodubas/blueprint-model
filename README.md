@@ -103,6 +103,77 @@ var properties = [
 var User = model.createModel('User', properties);
 ```
 
+## Events
+
+### Constructor
+
+#### `construct`
+
+Emitted after an instance is created with attributes set in the constructor.
+
+```javascript
+var User = model.createModel('User', ['username']);
+User.on('construct', function (instance, attrs) {
+    console.log(instance.model.modelName);
+    console.log(Object.keys(attrs));
+});
+var instance = new User({username: 'me'});
+```
+
+#### `change`
+
+Emitted after any property is set or changed.
+
+```javascript
+var User = mode.createModel('User', ['username', 'email']);
+User.on('change', function (instance, attr, value) {
+    console.log(instance.model.modelName, attr, value);
+});
+var instance = new User({username: 'me'});
+instance.email = 'me@me.com';
+```
+
+#### `change <property>`
+
+Emitted after the a given property is set or changed.
+
+```javascript
+var User = mode.createModel('User', ['username', 'email']);
+User.on('change email', function (instance, attr, value) {
+    console.log(instance.model.modelName, attr, value);
+});
+var instance = new User({username: 'me'});
+instance.email = 'me@me.com';
+```
+
+### Instance
+
+#### `change`
+
+Emitted after any property is set or changed.
+
+```javascript
+var User = mode.createModel('User', ['username', 'email']);
+var instance = new User({username: 'me'});
+instance.on('change', function (instance, attr, value) {
+    console.log(instance.model.modelName, attr, value);
+});
+instance.email = 'me@me.com';
+```
+
+#### `change <property>`
+
+Emitted after the a given property is set or changed.
+
+```javascript
+var User = mode.createModel('User', ['username', 'email']);
+var instance = new User({username: 'me'});
+instance.on('change email', function (instance, attr, value) {
+    console.log(instance.model.modelName, attr, value);
+});
+instance.email = 'me@me.com';
+```
+
 [travis-build-status]: https://travis-ci.org/joaodubas/blueprint-model.png?branch=master
 [travis-build]: https://travis-ci.org/joaodubas/blueprint-model
 [coverage-build-status]: https://coveralls.io/repos/joaodubas/blueprint-model/badge.png?branch=master

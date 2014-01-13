@@ -23,8 +23,10 @@
     "check-coverage": "node --harmony ./node_modules/.bin/istanbul check-coverage --statements 80 --branches 80 --lines 80 --functions 80",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "node ./node_modules/jshint/bin/jshint ./lib/*",
-    "build": "rm -rf ./build && ./node_modules/.bin/component build -o ./build -n blueprint",
-    "build-standalone": "rm -rf ./standalone && ./node_modules/.bin/component build -o ./standalone -n blueprint -s blueprint"
+    "build-b": "rm -rf ./build && ./node_modules/.bin/component build -o ./build -n blueprint",
+    "build-b-standalone": "rm -rf ./standalone && ./node_modules/.bin/component build -o ./standalone -n blueprint -s blueprint",
+    "build-c": "rm -rf ./build/* && ./node_modules/.bin/browserify -e ./lib/model.js -o ./build/blueprint.js",
+    "build-c-standalone": "rm -rf ./standalone/* && ./node_modules/.bin/browserify -e ./lib/model.js -o ./standalone/blueprint.js -s blueprint"
   },
   "devDependencies": {
     "mocha": "~1.16.2",
@@ -35,7 +37,12 @@
     "memdown": "~0.6.0",
     "level-co": "~0.2.0",
     "co": "~3.0.2",
+<<<<<<< HEAD
     "component": "~0.19.3"
+=======
+    "browserify": "~3.20.0",
+    "uglify-js": "~2.4.8"
+>>>>>>> [add] Browserify to concatenate all deps.
   },
   "license": "MIT"
 }

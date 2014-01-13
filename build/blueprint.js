@@ -1,4 +1,3 @@
-
 /**
  * Require the given path.
  *
@@ -335,7 +334,6 @@ function use(fn) {
 
 });
 require.register("blueprint-model/./lib/proto.js", function(exports, require, module){
-'use strict';
 const validators = require('./validator.js');
 
 exports.setProperties = setProperties;

@@ -1,13 +1,13 @@
 'use strict';
 /* jshint expr: true */
 /* global describe, it */
-const expect = require('chai').expect;
-const model = require('../lib/model.js');
+var expect = require('chai').expect;
+var model = require('../lib/model.js');
 
 describe('model', function () {
-  let modelName = 'User';
-  let namedProperties = ['name', 'email', 'password'];
-  let descriptorProperties = [
+  var modelName = 'User';
+  var namedProperties = ['name', 'email', 'password'];
+  var descriptorProperties = [
     {name: 'name'},
     {name: 'email'},
     {name: 'password'}
@@ -19,21 +19,21 @@ describe('model', function () {
     });
 
     it('create an empty model', function () {
-      let User = model.createModel(modelName);
+      var User = model.createModel(modelName);
       expect(User).to.be.a('function');
       expect(User.modelName).to.be.equal(modelName);
       expect(Object.keys(User.prototype)).to.be.empty;
     });
 
     it('create model with an array of named properties', function () {
-      let User = model.createModel(modelName, namedProperties);
+      var User = model.createModel(modelName, namedProperties);
       namedProperties.forEach(function (key) {
         expect(User.prototype).to.have.ownProperty(key);
       });
     });
 
     it('create model with an array of descriptor properties', function () {
-      let User = model.createModel(modelName, descriptorProperties);
+      var User = model.createModel(modelName, descriptorProperties);
       descriptorProperties.forEach(function (key) {
         expect(User.prototype).to.have.ownProperty(key.name);
       });
@@ -48,7 +48,7 @@ describe('model', function () {
 
   describe('append properties', function () {
     it('named properties', function () {
-      let User = model.createModel(modelName);
+      var User = model.createModel(modelName);
 
       namedProperties.forEach(function (key) {
         User.setProperty(key);
@@ -60,7 +60,7 @@ describe('model', function () {
     });
 
     it('descriptor properties', function () {
-      let User = model.createModel(modelName);
+      var User = model.createModel(modelName);
 
       descriptorProperties.forEach(function (key) {
         User.setProperty(key);
@@ -72,7 +72,7 @@ describe('model', function () {
     });
 
     it('named properties all at once', function () {
-      let User = model.createModel(modelName);
+      var User = model.createModel(modelName);
 
       User.setProperties(namedProperties);
 
@@ -82,7 +82,7 @@ describe('model', function () {
     });
 
     it('descriptor properties all at once', function () {
-      let User = model.createModel(modelName);
+      var User = model.createModel(modelName);
 
       User.setProperties(descriptorProperties);
 
@@ -93,7 +93,7 @@ describe('model', function () {
 
     it('in a chain', function () {
       function create() {
-        let User = model.createModel(modelName);
+        var User = model.createModel(modelName);
         User
           .setProperty('name')
           .setProperty('email')
@@ -106,10 +106,10 @@ describe('model', function () {
     });
 
     it('in a list', function () {
-      let properties = ['name', 'email', 'password'];
+      var properties = ['name', 'email', 'password'];
 
       function create() {
-        let User = model.createModel(modelName);
+        var User = model.createModel(modelName);
         User.setProperties(properties);
         return User;
       }
@@ -119,9 +119,9 @@ describe('model', function () {
     });
 
     it('invalid property should throw error', function () {
-      let property = [{names: 'property'}];
+      var property = [{names: 'property'}];
       expect(function () {
-        let User = model.createModel(modelName, property);
+        var User = model.createModel(modelName, property);
       }).to.throw(TypeError);
     });
   });
@@ -129,19 +129,19 @@ describe('model', function () {
   describe('validation', function () {
     describe('required', function () {
       it('validate required field', function () {
-        let properties = [{ name: 'property', required: true }];
-        let User = model.createModel(modelName, properties);
+        var properties = [{ name: 'property', required: true }];
+        var User = model.createModel(modelName, properties);
         expect(function () {
-          let user = new User();
+          var user = new User();
           user.property = null;
         }).to.throw(TypeError);
       });
 
       it('do not validate unrequired field', function () {
-        let properties = [{ name: 'diff_property', required: false }];
-        let User = model.createModel(modelName, properties);
+        var properties = [{ name: 'diff_property', required: false }];
+        var User = model.createModel(modelName, properties);
         expect(function () {
-          let user = new User();
+          var user = new User();
           user.diff_property = null;
         }).to.not.throw(TypeError); 
       });
@@ -149,13 +149,13 @@ describe('model', function () {
 
     describe('typed', function () {
       it('validate required and typed field', function () {
-        let properties = [
+        var properties = [
           { name: 'property', required: true, type: 'number' }
         ];
-        let User = model.createModel(modelName, properties);
+        var User = model.createModel(modelName, properties);
 
         function thrower(value) {
-          let user = new User();
+          var user = new User();
           user.property = value;
         }
 
@@ -165,13 +165,13 @@ describe('model', function () {
       });
 
       it('validate unreqired and typed field when value not null', function () {
-        let properties = [
+        var properties = [
           { name: 'property', required: false, type: 'number' }
         ];
-        let User = model.createModel(modelName, properties);
+        var User = model.createModel(modelName, properties);
 
         function thrower(value) {
-          let user = new User();
+          var user = new User();
           user.property = value;
         }
 
@@ -217,7 +217,7 @@ describe('model', function () {
 
     describe('custom validators', function () {
       it('accepts apply them', function () {
-        let properties = [{
+        var properties = [{
           name: 'property',
           required: true,
           type: 'number',
@@ -226,10 +226,10 @@ describe('model', function () {
             message: 'You must set a number lower than or equal to 10.'
           }]
         }];
-        let User = model.createModel(modelName, properties);
+        var User = model.createModel(modelName, properties);
 
         function thrower(value) {
-          let user = new User();
+          var user = new User();
           user.property = value;
         }
 
@@ -240,7 +240,7 @@ describe('model', function () {
       });
 
       it('must be an array', function () {
-        let properties = [{
+        var properties = [{
           name: 'property',
           requried: true,
           type: 'number',
@@ -251,12 +251,12 @@ describe('model', function () {
         }];
         
         expect(
-          function () { let User = model.createModel(modelName, properties); }
+          function () { var User = model.createModel(modelName, properties); }
         ).to.throw(TypeError);
       });
 
       it('can be multiple', function () {
-        let properties = [{
+        var properties = [{
           name: 'property',
           required: true,
           type: 'number',
@@ -271,10 +271,10 @@ describe('model', function () {
             },
           ]
         }];
-        let User = model.createModel(modelName, properties);
+        var User = model.createModel(modelName, properties);
 
         function thrower(value) {
-          let user = new User();
+          var user = new User();
           user.property = value;
         }
 
@@ -286,7 +286,7 @@ describe('model', function () {
       });
 
       it('can be used without required', function () {
-        let properties = [{
+        var properties = [{
           name: 'property',
           type: 'number',
           validators: [{
@@ -294,10 +294,10 @@ describe('model', function () {
             message: 'You must set a number lower than or equal to 10.'
           }]
         }];
-        let User = model.createModel(modelName, properties);
+        var User = model.createModel(modelName, properties);
 
         function thrower(value) {
-          let user = new User();
+          var user = new User();
           user.property = value;
         }
 
@@ -308,7 +308,7 @@ describe('model', function () {
       });
 
       it('can be used without a type', function () {
-        let properties = [{
+        var properties = [{
           name: 'property',
           required: true,
           validators: [{
@@ -316,10 +316,10 @@ describe('model', function () {
             message: 'You must set a number lower than or equal to 10.'
           }]
         }];
-        let User = model.createModel(modelName, properties);
+        var User = model.createModel(modelName, properties);
 
         function thrower(value) {
-          let user = new User();
+          var user = new User();
           user.property = value;
         }
 
@@ -330,17 +330,17 @@ describe('model', function () {
       });
 
       it('can be used without required and type', function () {
-        let properties = [{
+        var properties = [{
           name: 'property',
           validators: [{
             fn: function (value) { return value <= 10; },
             message: 'You must set a number lower than or equal to 10.'
           }]
         }];
-        let User = model.createModel(modelName, properties);
+        var User = model.createModel(modelName, properties);
 
         function thrower(value) {
-          let user = new User();
+          var user = new User();
           user.property = value;
         }
 
@@ -354,7 +354,7 @@ describe('model', function () {
 
   describe('instance', function () {
     it('create without `new` keyword', function () {
-      let User = model.createModel(modelName, ['name']);
+      var User = model.createModel(modelName, ['name']);
       function creator() {
         return User();
       }
@@ -365,10 +365,10 @@ describe('model', function () {
     });
 
     it('do not share property values', function () {
-      let properties = ['name', 'email', 'password'];
-      let User = model.createModel(modelName, properties);
-      let aUser = new User();
-      let otherUser = new User();
+      var properties = ['name', 'email', 'password'];
+      var User = model.createModel(modelName, properties);
+      var aUser = new User();
+      var otherUser = new User();
 
       expect(aUser.name).to.be.empty;
       expect(otherUser.name).to.be.empty;
@@ -379,20 +379,20 @@ describe('model', function () {
     });
 
     it('receive values during initialization', function () {
-      let attrs = {
+      var attrs = {
         name: 'me',
         email: 'me@me.com',
         password: 'me'
       };
-      let User = model.createModel(modelName, Object.keys(attrs));
-      let user = new User(attrs);
+      var User = model.createModel(modelName, Object.keys(attrs));
+      var user = new User(attrs);
       Object.keys(attrs).forEach(function (attr) {
         expect(user[attr]).to.be.equal(attrs[attr]);
       });
     });
 
     it('validate values during initialization', function () {
-      let properties = [
+      var properties = [
         {
           name: 'name',
           required: true,
@@ -409,7 +409,7 @@ describe('model', function () {
           type: 'string'
         }
       ];
-      let User = model.createModel(modelName, properties);
+      var User = model.createModel(modelName, properties);
 
       function thrower(attrs) {
         return function () {
@@ -435,9 +435,9 @@ describe('model', function () {
   describe('events', function () {
     describe('constructor', function () {
       it('emit construct after create an instance', function (done) {
-        let properties = ['name', 'email', 'password'];
-        let User = model.createModel(modelName, properties);
-        let props = {'name': 'me', 'email': 'me@me.com', 'password': 'me'};
+        var properties = ['name', 'email', 'password'];
+        var User = model.createModel(modelName, properties);
+        var props = {'name': 'me', 'email': 'me@me.com', 'password': 'me'};
 
         User.on('construct', function(instance, attrs) {
           expect(instance.constructor.modelName).to.be.equal(User.modelName);
@@ -449,27 +449,27 @@ describe('model', function () {
       });
 
       it('emit change when an attribute is set', function (done) {
-        let props = {'name': 'me', 'email': 'me@me.com', 'password': 'me'};
-        let User = model.createModel(modelName, Object.keys(props));
-        let count = 0;
-        let max_ = Object.keys(props).length;
+        var props = {'name': 'me', 'email': 'me@me.com', 'password': 'me'};
+        var User = model.createModel(modelName, Object.keys(props));
+        var count = 0;
+        var max_ = Object.keys(props).length;
         User.on('change', function (instance, attr, value) {
           expect(value).to.be.equal(props[attr]);
           count += 1;
           if (count === max_) done();
         });
 
-        let user = new User();
+        var user = new User();
         Object.keys(props).forEach(function (key) {
           user[key] = props[key];
         });
       });
 
       it('emit change <attr_name> when given attribute is set', function (done) {
-        let props = {'name': 'me', 'email': 'me@me.com', 'password': 'me'};
-        let User = model.createModel(modelName, Object.keys(props));
-        let count = 0;
-        let max_ = Object.keys(props).length;
+        var props = {'name': 'me', 'email': 'me@me.com', 'password': 'me'};
+        var User = model.createModel(modelName, Object.keys(props));
+        var count = 0;
+        var max_ = Object.keys(props).length;
 
         function assess(instance, value) {
           /* jshint validthis: true */
@@ -482,7 +482,7 @@ describe('model', function () {
         User.on('change email', assess.bind({attr: 'email'}));
         User.on('change password', assess.bind({attr: 'password'}));
 
-        let user = new User();
+        var user = new User();
         Object.keys(props).forEach(function (key) {
           user[key] = props[key];
         });
@@ -491,11 +491,11 @@ describe('model', function () {
 
     describe('instance', function () {
       it('emit change when an attribute is set', function (done) {
-        let props = {'name': 'me', 'email': 'me@me.com', 'password': 'me'};
-        let User = model.createModel(modelName, Object.keys(props));
-        let count = 0;
-        let max_ = Object.keys(props).length;
-        let user = new User();
+        var props = {'name': 'me', 'email': 'me@me.com', 'password': 'me'};
+        var User = model.createModel(modelName, Object.keys(props));
+        var count = 0;
+        var max_ = Object.keys(props).length;
+        var user = new User();
         user.on('change', function (instance, attr, value) {
           expect(value).to.be.equal(props[attr]);
           count += 1;
@@ -508,11 +508,11 @@ describe('model', function () {
       });
 
       it('emit change <attr_name> when given attribute is set', function (done) {
-        let props = {'name': 'me', 'email': 'me@me.com', 'password': 'me'};
-        let User = model.createModel(modelName, Object.keys(props));
-        let count = 0;
-        let max_ = Object.keys(props).length;
-        let user = new User();
+        var props = {'name': 'me', 'email': 'me@me.com', 'password': 'me'};
+        var User = model.createModel(modelName, Object.keys(props));
+        var count = 0;
+        var max_ = Object.keys(props).length;
+        var user = new User();
 
         function assess(instance, value) {
           /* jshint validthis: true */
@@ -534,7 +534,7 @@ describe('model', function () {
 
   describe('plugin', function () {
     it('receives a Model constructor', function (done) {
-      let User = model.createModel('User');
+      var User = model.createModel('User');
       function plugin(Model) {
         expect(Model.constructor.name).to.be.equal(User.constructor.name);
         expect(Model.modelName).to.be.equal(User.modelName);

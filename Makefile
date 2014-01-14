@@ -45,4 +45,17 @@ run:
 kill:
 	@$(CMD_KILL)
 
+build-cjs:
+	@$(CMD_NPM) run build \
+		; $(MAKE) kill
+
+build-standalone:
+	@$(CMD_NPM) run standalone \
+		; $(MAKE) kill
+
+build: build-cjs build-standalone
+
+clean:
+	@rm $(ROOT)/build/* && $(ROOT)/standalone/*
+
 .PHONY: shell kill test coverage check-coverage lint

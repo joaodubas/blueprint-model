@@ -26,6 +26,10 @@ test:
 	@$(CMD_NPM) test \
 		; $(MAKE) kill
 
+test-front:
+	@$(CMD) -e NODE_PORT=8999 -entrypoint $(NODE) -expose 8999 -p 8999:8999 $(DOCKER_IMAGE_UNSTABLE) --harmony test-server/server.js
+	@$(MAKE) kill
+
 coverage:
 	@$(CMD_NPM) run coverage \
 		; $(MAKE) kill

@@ -105,6 +105,26 @@ var properties = [
 var User = model.createModel('User', properties);
 ```
 
+### .use(function)
+
+Allow to extend the model with custom behavior through a function.
+
+```javascript
+var model = require('blueprint-model');
+var User = model.create('User');
+User
+    .setProperty('username')
+    .setProperty('email')
+    .setProperty('password')
+    .use(function (Model) {
+        function logger() {
+            console.log('action => ', arguments.join(' : ');
+        }
+        Model.on('construct', logger);
+        Model.on('change', logger);
+    });
+```
+
 ## Events
 
 ### Constructor

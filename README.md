@@ -6,6 +6,18 @@
 Database agnostic data modeller. Somewhat inspired by the [model
 component][component-model] made by [TJ Holowaychuck][git-visionmedia].
 
+## Usage and installation
+
+To install the package type:
+
+```shell
+$ npm install blueprint-model
+```
+
+To use it you should start `node` with `--harmonny` flag.
+
+The package is tested to run in [node at least 0.8.x][travis-build].
+
 ## API
 
 ### model#createModel(name, [properties])

@@ -22,7 +22,7 @@
     "coverage": "node --harmony ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha",
     "check-coverage": "node --harmony ./node_modules/.bin/istanbul check-coverage --statements 80 --branches 80 --lines 80 --functions 80",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "lint": "node ./node_modules/jshint/bin/jshint ./lib/*"
+    "lint": "node ./node_modules/jshint/bin/jshint ./lib/* ./examples/*"
   },
   "devDependencies": {
     "mocha": "~1.16.2",

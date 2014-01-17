@@ -52,6 +52,14 @@ run:
 	@$(CMD_SERVER) \
 		; $(MAKE) kill
 
+test-publish:
+	@$(CMD_NPM) install . -g \
+		; $(MAKE) kill
+
+publish:
+	@$(CMD_NPM) publish . \
+		; $(MAKE) kill
+
 kill:
 	@$(CMD_KILL)
 

@@ -40,6 +40,7 @@
     "koa": "~0.2.1"
   },
   "testling": {
+    "harness": "mocha",
     "files": "test/*.js",
     "browsers": {
       "ie": [8, 9, 10],

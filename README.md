@@ -10,7 +10,7 @@ component][component-model] made by [TJ Holowaychuck][git-visionmedia].
 
 ## Usage and installation
 
-To install the package type:
+To install the package use:
 
 ```shell
 $ npm install blueprint-model
@@ -70,7 +70,7 @@ The descriptor is an `object` with the following keys:
 
 * `name`: indicate the property name,
 * `required`: boolean indicating if the property is required, if `true` will
-  throw `TypeError` if a `value` is passed to the property,
+  throw `TypeError` if a `null` or `undefined` value is passed to the property,
 * `type`: indicate the property type, ensuring that you can only set the
   aproppriate value for the property, will throw `TypeError` if an invalid
   value is assigned to the property. For the moment the following types are
@@ -103,7 +103,7 @@ var properties = [
         type: 'string'
     },
     {
-        name: password,
+        name: 'password',
         requried: true,
         type: 'string',
         validators: [

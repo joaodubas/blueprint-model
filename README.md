@@ -2,6 +2,7 @@
 
 [![Build Status][travis-build-status]][travis-build]
 [![Coverage Status][coverage-build-status]][coverage-build]
+[![browser support][testling-build-status]][testling-build]
 
 Database agnostic data modeller. Somewhat inspired by the [model
 component][component-model] made by [TJ Holowaychuck][git-visionmedia].
@@ -178,5 +179,7 @@ instance.email = 'me@me.com';
 [travis-build]: https://travis-ci.org/joaodubas/blueprint-model
 [coverage-build-status]: https://coveralls.io/repos/joaodubas/blueprint-model/badge.png?branch=master
 [coverage-build]: https://coveralls.io/r/joaodubas/blueprint-model?branch=master
+[testling-build-status]: https://ci.testling.com/joaodubas/blueprint-model.png
+[testling-build]: https://ci.testling/joaodubas/blueprint-model
 [component-model]: https://github.com/component/model
 [git-visionmedia]: https://github.com/visionmedia

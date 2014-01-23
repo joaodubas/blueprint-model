@@ -4,7 +4,7 @@ DOCKER_DIR=/opt/app
 DOCKER_MOUNT=$(ROOT):$(DOCKER_DIR)
 DOCKER_IMAGE_STABLE=joaodubas/nodejs:latest
 DOCKER_IMAGE_UNSTABLE=joaodubas/nodejs-unstable:latest
-DOCKER_IMAGE=$(DOCKER_IMAGE_UNSTABLE)
+DOCKER_IMAGE=$(DOCKER_IMAGE_STABLE)
 DOCKER_NAME=blueprint-model
 NPM=/usr/local/bin/npm
 NODE=/usr/local/bin/node
@@ -15,20 +15,26 @@ CMD_SERVER=$(CMD) -entrypoint python -w $(DOCKER_DIR)/coverage/lcov-report -expo
 CMD_KILL=$(DOCKER) kill $(DOCKER_NAME) && $(DOCKER) rm $(DOCKER_NAME)
 
 install:
-	@$(CMD_NPM) install $(args)
-	@$(MAKE) kill
+	@$(CMD_NPM) install $(args) \
+		; $(MAKE) kill
 
 shell:
-	@$(CMD_NODE) --harmony
-	@$(MAKE) kill
+	@$(CMD_NODE) --harmony \
+		; $(MAKE) kill
 
 test:
 	@$(CMD_NPM) test \
 		; $(MAKE) kill
 
 test-front:
-	@$(CMD) -e NODE_PORT=8999 -entrypoint $(NODE) -expose 8999 -p 8999:8999 $(DOCKER_IMAGE_UNSTABLE) --harmony test-server/server.js
-	@$(MAKE) kill
+	@$(CMD) \
+		-e NODE_PORT=8999 \
+		-entrypoint $(NODE) \
+		-expose 8999 \
+		-p 8999:8999 \
+		$(DOCKER_IMAGE_UNSTABLE) \
+		--harmony test-server/server.js \
+		; $(MAKE) kill
 
 coverage:
 	@$(CMD_NPM) run coverage \

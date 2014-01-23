@@ -1,6 +1,6 @@
 {
   "node": true,
-  "esnext": true,
+  "esnext": false,
   "eqnull": true,
   "strict": true,
   "indent": 2

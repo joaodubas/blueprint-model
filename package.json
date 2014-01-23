@@ -22,7 +22,7 @@
     "coverage": "node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha",
     "check-coverage": "node ./node_modules/.bin/istanbul check-coverage --statements 80 --branches 80 --lines 80 --functions 80",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "lint": "node ./node_modules/jshint/bin/jshint ./lib/*",
+    "lint": "node ./node_modules/jshint/bin/jshint ./lib/* ./examples/*",
     "build": "rm ./build/* ; ./node_modules/.bin/browserify -e ./lib/model.js -o ./build/blueprint.js",
     "standalone": "rm ./standalone/* ; ./node_modules/.bin/browserify -e ./lib/model.js -o ./standalone/blueprint.js -s blueprint"
   },
@@ -43,7 +43,7 @@
     "harness": "mocha",
     "files": "test/*.js",
     "browsers": {
-      "ie": [8, 9, 10],
+      "ie": [8, 9, 10, 11],
       "firefox": [20, 21, 22, 23, 24, 25, "nightly"],
       "chrome": [30, 31, "canary"]
     }

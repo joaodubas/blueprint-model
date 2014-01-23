@@ -43,8 +43,8 @@
     "harness": "mocha",
     "files": "test/*.js",
     "browsers": {
-      "ie": [8, 9, 10, 11],
-      "firefox": [20, 21, 22, 23, 24, 25, "nightly"],
+      "ie": [9, 10, 11],
+      "firefox": [24, 25, "nightly"],
       "chrome": [30, 31, "canary"]
     }
   },

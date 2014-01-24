@@ -16,8 +16,6 @@ To install the package use:
 $ npm install blueprint-model
 ```
 
-To use it you should start `node` with `--harmonny` flag.
-
 The package is tested to run in [node at least 0.8.x][travis-build].
 
 ## API

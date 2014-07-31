@@ -1,0 +1,8 @@
+image: joaodubas/nodejs
+script:
+    - npm install
+    - npm test
+notify:
+    email:
+        recipients:
+            - joao.dubas@gmail.com
